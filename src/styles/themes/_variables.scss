@@ -1,0 +1,16 @@
+//  Variables and Theming. For more info, please see:
+
+/**  CSS Variables **/
+:root {
+  --primary-color: hsl(240, 3%, 6%);
+  --secondary-color:hsl(240, 4%, 11%);
+  
+  --text-color: hsl(0deg 0% 100%);
+
+  --correct-color: hsl(122deg 47% 45%);
+  --absent-color: hsl(240deg 2% 23%);
+  --partial-color: hsl(38deg 67% 50%);
+
+  --key-background: hsl(0deg 0% 39%);
+  --key-text-color: var(--text-color);
+}

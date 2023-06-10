@@ -1,0 +1,86 @@
+<p></p>
+<div class="board-container">
+  <div>
+    <small>Trouve la référence</small>
+  </div>
+
+  <p *ngIf="versle() as versleValue">
+    {{ versleValue.text }}
+  </p>
+
+  <div class="selection-container" *ngIf="attempts() as attemptsValue">
+    <div *ngFor="let lines of board(); let i = index" class="selection-items">
+      <div
+        *ngrxLet="lines[0] as bookIndex"
+        [ngClass]="attemptsValue[i] ? attemptsValue[i][0] : null"
+        (click)="currentRow() === i ? openAuthorDialog() : null"
+        class="item author-item"
+      >
+        <div *ngIf="bookIndex !== null; else noBookTemp">
+          {{ bookIndex | book }}
+        </div>
+      </div>
+
+      <div
+        *ngrxLet="lines[1] as chap1"
+        [ngClass]="attemptsValue[i] ? attemptsValue[i][1] : null"
+        class="item chapter-item-1"
+      >
+        <div *ngIf="chap1 !== null; else noValue">{{ chap1 }}</div>
+      </div>
+
+      <div
+        *ngrxLet="lines[2] as chap2"
+        [ngClass]="attemptsValue[i] ? attemptsValue[i][2] : null"
+        class="item chapter-item-2"
+      >
+        <div *ngIf="chap2 !== null; else noValue">{{ chap2 }}</div>
+      </div>
+      <div class="separator">:</div>
+
+      <div
+        *ngrxLet="lines[3] as verse1"
+        [ngClass]="attemptsValue[i] ? attemptsValue[i][3] : null"
+        class="item verse-item-1"
+      >
+        <div *ngIf="verse1 !== null; else noValue">{{ verse1 }}</div>
+      </div>
+
+      <div
+        *ngrxLet="lines[4] as verse2"
+        [ngClass]="attemptsValue[i] ? attemptsValue[i][4] : null"
+        class="item verse-item-2"
+      >
+        <div *ngIf="verse2 !== null; else noValue">{{ verse2 }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="keybord-container">
+    <div class="line line-1">
+      <div class="key" (click)="enterLetter('0')">0</div>
+      <div class="key" (click)="enterLetter('1')">1</div>
+      <div class="key" (click)="enterLetter('2')">2</div>
+      <div class="key" (click)="enterLetter('3')">3</div>
+      <div class="key" (click)="enterLetter('4')">4</div>
+      <div class="key" (click)="enterLetter('5')">5</div>
+    </div>
+    <div class="line line-2">
+      <div class="key" (click)="enterLetter('5')">5</div>
+      <div class="key" (click)="enterLetter('6')">6</div>
+      <div class="key" (click)="enterLetter('7')">7</div>
+      <div class="key" (click)="enterLetter('8')">8</div>
+      <div class="key" (click)="enterLetter('9')">9</div>
+      <div class="key" (click)="enterLetter('9')">9</div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #noBookTemp>
+  <div>Choisir un livre</div>
+</ng-template>
+
+<ng-template #noValue>
+  <div style="visibility: hidden">0</div>
+</ng-template>

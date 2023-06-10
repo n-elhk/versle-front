@@ -1,0 +1,13 @@
+<h2 class="title">Chosit un livre</h2>
+
+<div class="books-container">
+  <div class="books-items">
+    <div
+      class="books-item"
+      (click)="dialogRef.close(i)"
+      *ngFor="let book of books; let i = index"
+    >
+      <div class="title">{{ book.title }}</div>
+    </div>
+  </div>
+</div>

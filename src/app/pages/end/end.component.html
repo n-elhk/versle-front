@@ -1,0 +1,12 @@
+<div class="end-container">
+  <div class="link-container" *ngIf="url() as urlValue">
+    <div class="url-btn">
+      <a [href]="urlValue" target="_blank">Lire le passage</a>
+    </div>
+  </div>
+
+  <div class="date-container">
+    <p class="remaining">Prochain mot dans:</p>
+    <p class="remaining">{{ countdown() }}</p>
+  </div>
+</div>

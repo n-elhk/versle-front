@@ -1,0 +1,12 @@
+.dialog {
+  background-color: var(--secondary-color);
+  border: none !important;
+  color: white;
+  // padding-inline: 1rem;
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+  }
+}

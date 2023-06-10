@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./styles/themes/";
+@import "./styles/elements/";
+
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--primary-color);
+
+  /** Disable text slection. */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.page-container {
+  width: 100%;
+  position: relative;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 576px) {
+  .page-container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .page-container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .page-container {
+    max-width: 1140px;
+  }
+}

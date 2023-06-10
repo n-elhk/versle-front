@@ -1,0 +1,30 @@
+:host {
+  color: white;
+
+  .end-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    height: 90vh;
+    
+    .link-container {
+      .url-btn {
+        background-color: var(--absent-color);
+        border-radius: 7px;
+        padding: 0.5rem 1rem;
+        a {
+          color: currentColor;
+          text-decoration: none;
+        }
+      }
+    }
+    .date-container {
+      .remaining {
+        text-align: center;
+      }
+    }
+  }
+}
