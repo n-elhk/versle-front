@@ -1,10 +1,12 @@
-import { Answer, Board } from "./board";
+import { Answer, BoardStore } from './board';
 
-export interface VersleState {
+export type GameStorage = Pick<BoardStore, 'attempts' | 'board' | 'currentRow'>;
+
+export type VersleState =  {
   answer: Answer;
-  board: Board;
   versle: Versle;
-}
+  gameState: GameStorage;
+};
 
 export interface Versle {
   book: number;

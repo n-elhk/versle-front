@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { Attempt, Board, BoardStore, KeyOfAttempt } from '../../models/board';
-import { VersleState } from '../../models/versle';
+import { GameStorage, VersleState } from '../../models/versle';
+import { StorageKey } from '../../models/storage';
+
 
 export const DEFAULT_BOARD: Board = [
   [null, null, null, null, null],
@@ -16,6 +18,7 @@ export const DEFAULT_BOARD: Board = [
   providedIn: 'root',
 })
 export class BoardService extends ComponentStore<BoardStore> {
+
   constructor() {
     super({
       attempts: [],
@@ -28,7 +31,9 @@ export class BoardService extends ComponentStore<BoardStore> {
     });
   }
 
-  readonly selectCurrentRow = this.selectSignal(({ currentRow }) => currentRow);
+  readonly selectCurrentRow = this.selectSignal(({ currentRow }) => {
+    return currentRow;
+  });
 
   readonly selectAnswer = this.selectSignal(({ answer }) => answer);
 
@@ -51,7 +56,13 @@ export class BoardService extends ComponentStore<BoardStore> {
   });
 
   readonly init = this.updater((state, value: VersleState) => {
-    return { ...state, ...value };
+    const { answer, gameState, versle } = { ...value };
+    return {
+      ...state,
+      versle,
+      answer,
+      ...gameState,
+    };
   });
 
   readonly chooseNumber = this.updater((state, value: number) => {
@@ -66,17 +77,22 @@ export class BoardService extends ComponentStore<BoardStore> {
     /** Because we was remove the first of the copy. */
     line[index + 1] = value;
 
+    this.saveGameState({ board });
+
     return { ...state, ...board };
   });
 
   readonly deleteLastNumber = this.updater((state) => {
-    const board = [...state.board];
+    const board = state.board;
     const line = board[state.currentRow];
     const index = this.findLastNaNIndex(line);
 
     if (index > 0) {
       line[index] = null;
     }
+
+    this.saveGameState({ board });
+
     return { ...state, ...board };
   });
 
@@ -85,6 +101,8 @@ export class BoardService extends ComponentStore<BoardStore> {
     const line = board[state.currentRow];
 
     line[0] = value;
+
+    this.saveGameState({ board });
 
     return { ...state, ...board };
   });
@@ -95,7 +113,7 @@ export class BoardService extends ComponentStore<BoardStore> {
     const answer = [...state.answer];
 
     /** Add the first element its a book index. */
-    const attempts: KeyOfAttempt[] = [
+    const tempAttempts: KeyOfAttempt[] = [
       line[0] === answer[0] ? Attempt.correct : Attempt.absent,
     ];
 
@@ -107,12 +125,16 @@ export class BoardService extends ComponentStore<BoardStore> {
     const lineStr = line.join('');
     const answerStr = answer.join('');
 
-    attempts.push(...this.computeColors(lineStr, answerStr));
-    console.log(attempts);
+    tempAttempts.push(...this.computeColors(lineStr, answerStr));
+    const currentRow = state.currentRow + 1;
+    const attempts = [...state.attempts, tempAttempts];
+
+    this.saveGameState({ attempts, currentRow });
+
     return {
       ...state,
-      currentRow: state.currentRow + 1,
-      attempts: [...state.attempts, attempts],
+      currentRow,
+      attempts,
     };
   });
 
@@ -158,5 +180,25 @@ export class BoardService extends ComponentStore<BoardStore> {
       }
     }
     return colors;
+  }
+
+  saveGameState<T extends keyof GameStorage>(toSave: Pick<GameStorage, T>) {
+    const stateStr = localStorage.getItem(StorageKey.GameState);
+
+    if (!stateStr) {
+      throw new Error('Can not found state');
+    }
+
+    try {
+      const vsState: GameStorage = JSON.parse(stateStr);
+
+      for (const key in toSave) {
+        vsState[key] = toSave[key];
+      }
+
+      localStorage.setItem(StorageKey.GameState, JSON.stringify(vsState));
+    } catch (error) {
+      console.log('errror', error);
+    }
   }
 }

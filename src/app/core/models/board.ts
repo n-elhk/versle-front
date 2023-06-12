@@ -1,16 +1,16 @@
 import { Versle } from './versle';
 
-type toto = number | null;
+type BoardValue = number | null;
 
 export type Answer = [number, string, string, string, string];
 
 export type Board = [
-  [toto, toto, toto, toto, toto],
-  [toto, toto, toto, toto, toto],
-  [toto, toto, toto, toto, toto],
-  [toto, toto, toto, toto, toto],
-  [toto, toto, toto, toto, toto],
-  [toto, toto, toto, toto, toto]
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue],
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue],
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue],
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue],
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue],
+  [BoardValue, BoardValue, BoardValue, BoardValue, BoardValue]
 ];
 
 export interface BoardStore {

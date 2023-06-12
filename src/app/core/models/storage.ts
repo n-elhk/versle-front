@@ -1,5 +1,5 @@
 export enum StorageKey {
-  BoardState = 'versle-state',
+  GameState = 'versle-game',
   Statistics = 'versle-statistics',
   Status = 'versle-status',
   Answer = 'versle-answer',

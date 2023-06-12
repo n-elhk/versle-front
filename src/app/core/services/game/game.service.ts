@@ -24,9 +24,9 @@ export class GameService {
    */
   public getVersle(): VersleState {
     const answerStr = localStorage.getItem(StorageKey.Answer),
-      board = localStorage.getItem(StorageKey.BoardState);
+      gameState = localStorage.getItem(StorageKey.GameState);
 
-    if (this.checkLastSaved() || !answerStr || !board) {
+    if (this.checkLastSaved() || !answerStr || !gameState) {
       return this.reset();
     }
 
@@ -35,13 +35,13 @@ export class GameService {
     return {
       answer: this.getAnswer(versle),
       versle,
-      board: JSON.parse(board),
+      gameState: JSON.parse(gameState),
     };
   }
 
   public replay(): void {
-    const tt = this.getVersle();
-    this.boardService.init(tt);
+    const versle = this.getVersle();
+    this.boardService.init(versle);
   }
 
   private checkLastSaved(): boolean {
@@ -85,11 +85,6 @@ export class GameService {
       .split('')
       .map((r) => r.padStart(2, '0')) as [string, string];
 
-    console.log('[versle.book, ...chapters, ...verses]', [
-      versle.book,
-      ...chapters,
-      ...verses,
-    ]);
     return [versle.book, ...chapters, ...verses];
   }
 
@@ -101,14 +96,16 @@ export class GameService {
     const b64 = window.btoa(JSON.stringify(versle)),
       newDate = new Date().getTime();
 
+    const gameState = { board: DEFAULT_BOARD, currentRow: 0, attempts: [] };
+
     localStorage.setItem(StorageKey.Answer, b64);
     localStorage.setItem(StorageKey.Date, newDate.toString());
-    localStorage.setItem(StorageKey.BoardState, JSON.stringify(DEFAULT_BOARD));
+    localStorage.setItem(StorageKey.GameState, JSON.stringify(gameState));
 
     return {
       answer: this.getAnswer(versle),
       versle,
-      board: DEFAULT_BOARD,
+      gameState,
     };
   }
 }
