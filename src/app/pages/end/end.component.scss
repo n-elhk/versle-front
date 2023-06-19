@@ -9,7 +9,11 @@
     gap: 1rem;
     width: 100%;
     height: 90vh;
-    
+
+    .ref-value {
+      text-align: center;
+    }
+
     .link-container {
       .url-btn {
         background-color: var(--absent-color);

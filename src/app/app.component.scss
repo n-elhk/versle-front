@@ -1,0 +1,44 @@
+:host {
+  color: white;
+  .header--container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    background-color: var(--secondary-color);
+    padding: 0.5rem;
+    font-weight: 500;
+    font-size: 1.2em;
+
+    .title {
+      flex: 2;
+      padding-block: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: capitalize;
+      gap: 2rem;
+
+      .word {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: capitalize;
+        gap: 0.1rem;
+
+        span {
+          border-radius: 7px;
+          padding: 0.2rem 0.5rem;
+        }
+        
+        .first {
+          background-color: var(--correct-color);
+        }
+
+        .last {
+          background-color: var(--partial-color);
+        }
+      }
+    }
+  }
+}

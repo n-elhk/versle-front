@@ -13,14 +13,15 @@ import { BOOKS } from 'src/app/core/mock/books';
 import { Observable, interval, map } from 'rxjs';
 import { BoardService } from 'src/app/core/services/board/board.service';
 import { GameService } from 'src/app/core/services/game/game.service';
+import { BookPipe } from '../../common/pipes/book.pipe';
 
 @Component({
   selector: 'vs-end',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './end.component.html',
   styleUrls: ['./end.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, BookPipe],
 })
 export class EndComponent {
   /** Injection of {@link DomSanitizer}. */
@@ -32,7 +33,7 @@ export class EndComponent {
   /** Injection of {@link GameService}. */
   private gameService = inject(GameService);
 
-  private versle = this.boardService.selectVersle;
+  public versle = this.boardService.selectVersle;
 
   private timestamp = signal(Number(localStorage.getItem(StorageKey.Date)));
 
@@ -78,10 +79,10 @@ export class EndComponent {
     // Calculer la différence entre les deux dates en millisecondes
     const difference = endDate.getTime() - now.getTime();
 
-    // Convertir la différence en heures, minutes et secondes
-    const hours = Math.floor(difference / (1000 * 60 * 60));
-    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    // Convertir la différence en heures, minutes et secondes.
+    const hours = Math.floor(difference / (1000 * 60 * 60)),
+      minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
     // Afficher le décompte
     return { hours, minutes, seconds };

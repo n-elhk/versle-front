@@ -5,5 +5,3 @@ export enum StorageKey {
   Answer = 'versle-answer',
   Date = 'versle-date',
 }
-
-// export type KeyOfAttempt = keyof typeof Attempt;
