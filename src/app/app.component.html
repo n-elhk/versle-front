@@ -17,9 +17,9 @@
 </div>
 
 <div class="page-container">
-  <vs-board *ngIf="currentRow() < 6; else endTemp" />
-
-  <ng-template #endTemp>
-    <vs-end />
-  </ng-template>
+  @if (currentRow() < 6) {
+  <vs-board />
+  } @else {
+  <vs-end />
+  }
 </div>

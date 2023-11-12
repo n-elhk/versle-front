@@ -1,16 +1,20 @@
 <div class="end-container">
   <p>La rérence était</p>
 
-  <h3 class="ref-value" *ngIf="versle() as versleValue">
+  @if(versle(); as versleValue){
+  <h3 class="ref-value">
     {{ versleValue.book | book }} {{ versleValue.chapter }} :
     {{ versleValue.verse }}
   </h3>
-
-  <div class="link-container" *ngIf="url() as urlValue">
+  } 
+  
+  @if(url(); as urlValue){
+  <div class="link-container">
     <div class="url-btn">
       <a [href]="urlValue" target="_blank">Lire le passage</a>
     </div>
   </div>
+  }
 
   <div class="date-container">
     <p class="remaining"><b> Prochain mot dans:</b></p>

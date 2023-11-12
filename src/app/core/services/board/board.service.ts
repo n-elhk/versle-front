@@ -4,7 +4,6 @@ import { Attempt, Board, BoardStore, KeyOfAttempt } from '../../models/board';
 import { GameStorage, VersleState } from '../../models/versle';
 import { StorageKey } from '../../models/storage';
 
-
 export const DEFAULT_BOARD: Board = [
   [null, null, null, null, null],
   [null, null, null, null, null],
@@ -18,7 +17,6 @@ export const DEFAULT_BOARD: Board = [
   providedIn: 'root',
 })
 export class BoardService extends ComponentStore<BoardStore> {
-
   constructor() {
     super({
       attempts: [],
@@ -78,7 +76,6 @@ export class BoardService extends ComponentStore<BoardStore> {
     line[index + 1] = value;
 
     this.saveGameState({ board });
-
     return { ...state, ...board };
   });
 

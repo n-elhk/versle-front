@@ -4,21 +4,27 @@
     <small>Trouve la référence</small>
   </div>
 
-  <p *ngIf="versle() as versleValue">
-    {{ versleValue.text }}
-  </p>
+  @if (versle(); as versleValue) {
+    <p>
+      {{ versleValue.text }}
+    </p>
+  }
 
-  <div class="selection-container" *ngIf="attempts() as attemptsValue">
-    <div *ngFor="let lines of board(); let i = index" class="selection-items">
+  @if(attempts(); as attemptsValue){
+  <div class="selection-container">
+    @for (lines of board(); let i = $index; track i) {
+    <div class="selection-items">
       <div
         *ngrxLet="lines[0] as bookIndex"
         [ngClass]="attemptsValue[i] ? attemptsValue[i][0] : null"
         (click)="currentRow() === i ? openAuthorDialog() : null"
         class="item author-item"
       >
-        <div *ngIf="bookIndex !== null; else noBookTemp">
-          {{ bookIndex | book }}
-        </div>
+        @if (bookIndex !== null) {
+        <div>{{ bookIndex | book }}</div>
+        } @else{
+        <div>Choisir un livre</div>
+        }
       </div>
 
       <div
@@ -26,7 +32,11 @@
         [ngClass]="attemptsValue[i] ? attemptsValue[i][1] : null"
         class="item chapter-item-1"
       >
-        <div *ngIf="chap1 !== null; else noValue">{{ chap1 }}</div>
+        @if (chap1 !== null) {
+        <div>{{ chap1 }}</div>
+        }@else {
+        <ng-container *ngTemplateOutlet="noValue"></ng-container>
+        }
       </div>
 
       <div
@@ -34,7 +44,11 @@
         [ngClass]="attemptsValue[i] ? attemptsValue[i][2] : null"
         class="item chapter-item-2"
       >
-        <div *ngIf="chap2 !== null; else noValue">{{ chap2 }}</div>
+        @if (chap2 !== null) {
+        <div>{{ chap2 }}</div>
+        }@else {
+        <ng-container *ngTemplateOutlet="noValue"></ng-container>
+        }
       </div>
       <div class="separator">:</div>
 
@@ -43,7 +57,11 @@
         [ngClass]="attemptsValue[i] ? attemptsValue[i][3] : null"
         class="item verse-item-1"
       >
-        <div *ngIf="verse1 !== null; else noValue">{{ verse1 }}</div>
+        @if (verse1 !== null) {
+        <div>{{ verse1 }}</div>
+        }@else {
+        <ng-container *ngTemplateOutlet="noValue"></ng-container>
+        }
       </div>
 
       <div
@@ -51,10 +69,16 @@
         [ngClass]="attemptsValue[i] ? attemptsValue[i][4] : null"
         class="item verse-item-2"
       >
-        <div *ngIf="verse2 !== null; else noValue">{{ verse2 }}</div>
+        @if (verse2 !== null) {
+        <div>{{ verse2 }}</div>
+        }@else {
+        <ng-container *ngTemplateOutlet="noValue"></ng-container>
+        }
       </div>
     </div>
+    }
   </div>
+  }
 
   <div class="keybord-container">
     <div class="line line-1">
@@ -74,12 +98,7 @@
       <div class="key" (click)="enterLetter('9')">9</div>
     </div>
   </div>
-
 </div>
-
-<ng-template #noBookTemp>
-  <div>Choisir un livre</div>
-</ng-template>
 
 <ng-template #noValue>
   <div style="visibility: hidden">0</div>

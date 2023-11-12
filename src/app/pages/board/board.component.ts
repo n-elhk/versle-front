@@ -1,30 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  NgZone,
   inject,
-  signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BoardService } from 'src/app/core/services/board/board.service';
-import {
-  Observable,
-  filter,
-  fromEvent,
-  interval,
-  map,
-  tap,
-  throttleTime,
-} from 'rxjs';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { filter, fromEvent, map, tap, throttleTime } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { AuthorComponent } from 'src/app/components/modals/author/author.component';
 import { LetDirective } from '@ngrx/component';
 import { BookPipe } from 'src/app/common/pipes/book.pipe';
-import { StorageKey } from 'src/app/core/models/storage';
-import { BOOKS } from 'src/app/core/mock/books';
-import { DomSanitizer } from '@angular/platform-browser';
-import { GameService } from 'src/app/core/services/game/game.service';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 
 export enum KeyType {
   LETTER = 'LETTER',
@@ -38,7 +25,8 @@ export enum KeyType {
   selector: 'vs-board',
   standalone: true,
   imports: [
-    CommonModule,
+    NgClass,
+    NgTemplateOutlet,
     DialogModule,
     AuthorComponent,
     LetDirective,
@@ -50,28 +38,34 @@ export enum KeyType {
 })
 export class BoardComponent {
   /** Injection of {@link BoardService}. */
-  private boardService = inject(BoardService);
+  private readonly boardService = inject(BoardService);
+
+  /** Injection of {@link NgZone}. */
+  private readonly ngZone = inject(NgZone);
 
   /** Injection of {@link Dialog}. */
-  private dialog = inject(Dialog);
+  private readonly dialog = inject(Dialog);
 
+  public readonly versle = this.boardService.selectVersle;
 
-  public versle = this.boardService.selectVersle;
+  public readonly attempts = this.boardService.selectAttempts;
 
-  public attempts = this.boardService.selectAttempts;
+  public readonly board = this.boardService.selectBoard;
 
-  public board = this.boardService.selectBoard;
-
-  public currentRow = this.boardService.selectCurrentRow;
+  public readonly currentRow = this.boardService.selectCurrentRow;
 
   constructor() {
-    fromEvent<KeyboardEvent>(document, 'keydown', { passive: true })
-      .pipe(
-        throttleTime(200, undefined, { leading: true, trailing: true }),
-        map((ev) => this.enterLetter(ev.key)),
-        takeUntilDestroyed()
-      )
-      .subscribe();
+    this.ngZone.runOutsideAngular(() => {
+      fromEvent<KeyboardEvent>(document, 'keydown', { passive: true })
+        .pipe(
+          map(({ key }) => key),
+          filter(canType),
+          throttleTime(200, undefined, { leading: true, trailing: true }),
+          map((key) => this.enterLetter(key)),
+          takeUntilDestroyed()
+        )
+        .subscribe();
+    });
   }
 
   public openAuthorDialog(): void {
@@ -117,3 +111,10 @@ export class BoardComponent {
     }
   }
 }
+
+const canType = (key: string) => {
+  return !!(
+    Object.keys(KeyType).includes(key.toUpperCase()) ||
+    !isNaN(parseInt(key, 10))
+  );
+};

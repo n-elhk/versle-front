@@ -5,7 +5,6 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { StorageKey } from 'src/app/core/models/storage';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -21,25 +20,27 @@ import { BookPipe } from '../../common/pipes/book.pipe';
   templateUrl: './end.component.html',
   styleUrls: ['./end.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, BookPipe],
+  imports: [BookPipe],
 })
 export class EndComponent {
   /** Injection of {@link DomSanitizer}. */
-  private sanitizer = inject(DomSanitizer);
+  private readonly sanitizer = inject(DomSanitizer);
 
   /** Injection of {@link BoardService}. */
-  private boardService = inject(BoardService);
+  private readonly boardService = inject(BoardService);
 
   /** Injection of {@link GameService}. */
-  private gameService = inject(GameService);
+  private readonly gameService = inject(GameService);
 
-  public versle = this.boardService.selectVersle;
+  public readonly versle = this.boardService.selectVersle;
 
-  private timestamp = signal(Number(localStorage.getItem(StorageKey.Date)));
+  private readonly timestamp = signal(
+    Number(localStorage.getItem(StorageKey.Date))
+  );
 
-  public countdown = toSignal(this.countdown$());
+  public readonly countdown = toSignal(this.countdown$());
 
-  public url = computed(() => {
+  public readonly url = computed(() => {
     const versle = this.versle();
     if (!versle) {
       return this.sanitizer.bypassSecurityTrustUrl(
