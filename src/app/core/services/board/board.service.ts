@@ -29,9 +29,7 @@ export class BoardService extends ComponentStore<BoardStore> {
     });
   }
 
-  readonly selectCurrentRow = this.selectSignal(({ currentRow }) => {
-    return currentRow;
-  });
+  readonly selectCurrentRow = this.selectSignal(({ currentRow }) => currentRow);
 
   readonly selectAnswer = this.selectSignal(({ answer }) => answer);
 
@@ -39,7 +37,9 @@ export class BoardService extends ComponentStore<BoardStore> {
 
   readonly selectAttempts = this.selectSignal(({ attempts }) => attempts);
 
-  readonly selectBoard = this.selectSignal(({ board }) => board);
+  readonly selectBoard = this.selectSignal(({ board }) => board, {
+    equal: (a, b) => a.toString() !== b.toString(),
+  });
 
   readonly lineIsComplete = this.selectSignal(
     ({ board, currentRow }) =>

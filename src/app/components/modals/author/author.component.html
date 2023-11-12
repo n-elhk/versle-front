@@ -2,12 +2,10 @@
 
 <div class="books-container">
   <div class="books-items">
-    <div
-      class="books-item"
-      (click)="dialogRef.close(i)"
-      *ngFor="let book of books; let i = index"
-    >
+    @for (book of books; let i = $index; track i) {
+    <div class="books-item" (click)="dialogRef.close(i)">
       <div class="title">{{ book.title }}</div>
     </div>
+    }
   </div>
 </div>

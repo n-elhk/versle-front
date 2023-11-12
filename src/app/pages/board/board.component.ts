@@ -56,15 +56,17 @@ export class BoardComponent {
 
   constructor() {
     this.ngZone.runOutsideAngular(() => {
-      fromEvent<KeyboardEvent>(document, 'keydown', { passive: true })
-        .pipe(
-          map(({ key }) => key),
-          filter(canType),
-          throttleTime(200, undefined, { leading: true, trailing: true }),
-          map((key) => this.enterLetter(key)),
-          takeUntilDestroyed()
-        )
-        .subscribe();
+    fromEvent<KeyboardEvent>(document, 'keydown', { passive: true })
+      .pipe(
+        map(({ key }) => key),
+        filter(canType),
+        throttleTime(200, undefined, { leading: true, trailing: true }),
+        map((key) => {
+          this.ngZone.runTask(() => this.enterLetter(key));
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
     });
   }
 
